@@ -1,78 +1,52 @@
-create database dhruv;
+-- 1. CREATE A DATABASE
+CREATE DATABASE SchoolDB;
 
-CREATE TABLE employee (
-    emp_id INT PRIMARY KEY,          -- Unique Employee ID
-    emp_name VARCHAR(100) NOT NULL,  -- Employee Name
-    department_id INT,               -- Department ID (Foreign Key)
-    position VARCHAR(50),            -- Employee Position
-    salary DECIMAL(10,2)             -- Salary with 2 decimal places
+-- 2. SELECT THE DATABASE (Only needed in some RDBMS like MySQL)
+USE SchoolDB;
+
+-- 3. CREATE A TABLE with various data types
+CREATE TABLE Students (
+    StudentID INT PRIMARY KEY,       -- Integer type, primary key
+    FirstName VARCHAR(50),           -- String type with max 50 characters
+    LastName VARCHAR(50),
+    BirthDate DATE,                  -- Date type
+    Email VARCHAR(100),
+    GPA DECIMAL(3,2),                -- Decimal with 3 digits total, 2 after decimal (e.g. 3.75)
+    IsActive BOOLEAN                 -- Boolean type (TRUE/FALSE)
 );
 
-INSERT INTO employee (emp_id, emp_name, department_id, position, salary) 
-VALUES 
-(1, 'John Doe', 101, 'Manager', 75000.00),
-(2, 'Jane Smith', 102, 'Developer', 65000.00),
-(3, 'Alice Brown', 101, 'HR Executive', 50000.00),
-(4, 'Bob White', 103, 'Sales Executive', 60000.00);
+-- 4. INSERT DATA INTO THE TABLE
+INSERT INTO Students (StudentID, FirstName, LastName, BirthDate, Email, GPA, IsActive)
+VALUES
+(1, 'Alice', 'Johnson', '2001-05-15', 'alice.johnson@example.com', 3.85, TRUE),
+(2, 'Bob', 'Smith', '2000-11-22', 'bob.smith@example.com', 3.40, TRUE),
+(3, 'Charlie', 'Brown', '1999-08-10', 'charlie.brown@example.com', 2.95, FALSE);
 
-select * from employee;
-select distinct * from employee;
-select position,max(salary) from employee group by position;
-select max(salary) , emp_name from employee;
-select * from employee order by salary desc limit 3;
-with cte as (select distinct * from employee
-)
-select * from cte order by salary asc limit 3;
+-- 5. SELECT DATA FROM THE TABLE
+SELECT * FROM Students; -- Selects all columns and rows
 
-with cte as (select * ,row_number() over(order by salary asc ) rn from employee
-)
-select * from cte where rn=2;
+-- 6. SELECT SPECIFIC COLUMNS
+SELECT FirstName, GPA FROM Students;
 
-select * ,  row_number() over(partition by position order by salary desc ) rn from employee;
+-- 7. UPDATE A RECORD
+UPDATE Students
+SET GPA = 3.95
+WHERE StudentID = 1;
 
+-- 8. DELETE A RECORD
+DELETE FROM Students
+WHERE StudentID = 3;
 
-with cte as (select * ,row_number() over (partition by position order by salary asc) rn from employee
-)
-select * from cte where rn = 1;
+-- 9. ADD A NEW COLUMN TO THE TABLE
+ALTER TABLE Students
+ADD PhoneNumber VARCHAR(15);
 
-CREATE TABLE emp (
-    emp_id INT PRIMARY KEY,          
-    emp_name VARCHAR(100) NOT NULL,  
-    department_id INT,               
-    position VARCHAR(50),            
-    salary DECIMAL(10,2)             
-);
-INSERT INTO emp (emp_id, emp_name, department_id, position, salary) 
-VALUES 
-(1, 'John Doe', 101, 'Manager', 75000.00),
-(2, 'Jane Smith', 102, 'Developer', 65000.00),
-(3, 'Alice Brown', 101, 'HR Executive', 50000.00),
-(4, 'Bob White', 103, 'Sales Executive', 60000.00),
-(5, 'Tom Johnson', 104, 'Technician', 55000.00),
-(6, 'Emma Wilson', NULL, 'Analyst', 58000.00);  -- No department assigned
+-- 10. DROP A COLUMN FROM THE TABLE
+ALTER TABLE Students
+DROP COLUMN PhoneNumber;
 
-CREATE TABLE department (
-    department_id INT PRIMARY KEY,  
-    department_name VARCHAR(50)     
-);
-INSERT INTO department (department_id, department_name) 
-VALUES 
-(101, 'HR'),
-(102, 'IT'),
-(103, 'Sales'),
-(105, 'Marketing');  -- This department has no employees
+-- 11. DROP THE TABLE
+DROP TABLE Students;
 
-select * from emp;
-select * from department;
-
-
-select * from emp join department on emp.department_id = department.department_id;
-select * from emp left join department on emp.department_id= department.department_id;
-select * from emp right join department on emp.department_id = department.department_id;
-select * from emp;
-select * into table4 from emp where 1=2;
-select MONTH(current_timestamp());
-
-
-
-
+-- 12. DROP THE DATABASE
+DROP DATABASE SchoolDB;
